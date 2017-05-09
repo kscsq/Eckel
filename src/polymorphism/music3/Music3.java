@@ -2,9 +2,17 @@
 // An extensible program.
 package polymorphism.music3;
 import polymorphism.music.Note;
+
+import java.util.Random;
+
 import static net.mindview.util.Print.*;
 
 class Instrument {
+  @Override
+  public String toString() {
+    return "Instrument{}";
+  }
+
   void play(Note n) { print("Instrument.play() " + n); }
   String what() { return "Instrument"; }
   void adjust() { print("Adjusting Instrument"); }
@@ -27,6 +35,11 @@ class Stringed extends Instrument {
   String what() { return "Stringed"; }
   void adjust() { print("Adjusting Stringed"); }
 }
+class Ykulele extends Stringed {
+  void play(Note n) { print("Ykulele.play() " + n); }
+  String what() { return "Ykulele"; }
+  void adjust() { print("Adjusting Ykulele"); }
+}
 
 class Brass extends Wind {
   void play(Note n) { print("Brass.play() " + n); }
@@ -48,17 +61,40 @@ public class Music3 {
   public static void tuneAll(Instrument[] e) {
     for(Instrument i : e)
       tune(i);
-  }	
+  }
+  static class InstrumentGenerator {
+    Random rand = new Random(57);
+public Instrument next(){
+  switch (rand.nextInt(6)){
+    default:
+    case 0: return new Brass();
+    case 1: return new Percussion();
+    case 2: return new Stringed();
+    case 3: return new Wind();
+    case 4: return new Woodwind();
+    case 5: return new Ykulele();
+  }
+}
+  }
   public static void main(String[] args) {
+
+    Instrument[] ins = new Instrument[10];
+    InstrumentGenerator ig = new InstrumentGenerator();
+for (int i = 0; i < ins.length; i++)
+  ins[i] = ig.next();
     // Upcasting during addition to the array:
-    Instrument[] orchestra = {
-      new Wind(),
-      new Percussion(),
-      new Stringed(),
-      new Brass(),
-      new Woodwind()
-    };
-    tuneAll(orchestra);
+//    Instrument[] orchestra = {
+//      new Wind(),
+//      new Percussion(),
+//      new Stringed(),
+//      new Brass(),
+//      new Woodwind(),
+//            new Ykulele()
+//    };
+//    tuneAll(orchestra);
+//    System.out.println(new Wind().what());
+  for (Instrument i: ins)
+    System.out.println(i.what());
   }
 } /* Output:
 Wind.play() MIDDLE_C
